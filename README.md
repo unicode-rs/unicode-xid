@@ -1,39 +1,34 @@
-# unicode-derived-property
+# unicode-xid
 
-Determine displayed width of `char` and `str` types according to
-[Unicode Standard Annex #11](http://www.unicode.org/reports/tr11/)
-rules.
+Determine if a `char` is a valid identifier for a parser and/or lexer according to
+[Unicode Standard Annex #31](http://www.unicode.org/reports/tr31/) rules.
 
-[![Build Status](https://travis-ci.org/unicode-rs/unicode-derived-property.svg)](https://travis-ci.org/unicode-rs/unicode-derived-property)
+[![Build Status](https://travis-ci.org/unicode-rs/unicode-xid.svg)](https://travis-ci.org/unicode-rs/unicode-xid)
 
-[Documentation](https://unicode-rs.github.io/unicode-width/unicode_width/index.html)
+[Documentation](https://unicode-rs.github.io/unicode-xid/unicode_xid/index.html)
 
 ```rust
-extern crate unicode_width;
+extern crate unicode_xid;
 
-use unicode_width::UnicodeWidthStr;
+use unicode_xid::UnicodeXID;
 
 fn main() {
-    let teststr = "Ｈｅｌｌｏ, ｗｏｒｌｄ!";
-    let width = UnicodeWidthStr::width(teststr);
-    println!("{}", teststr);
-    println!("The above string is {} columns wide.", width);
-    let width = teststr.width_cjk();
-    println!("The above string is {} columns wide (CJK).", width);
+    let ch = 'a';
+    println!("Is {} a valid start of an identifier? {}", ch, UnicodeXID::is_xid_start(ch));
 }
 ```
 
-## features
+# features
 
-unicode-width supports a `no_std` feature. This eliminates dependence
+unicode-xid supports a `no_std` feature. This eliminates dependence
 on std, and instead uses equivalent functions from core.
 
-## crates.io
+# crates.io
 
 You can use this package in your project by adding the following
 to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-unicode-derived-property = "0.1.1"
+unicode-derived_property = "0.0.1"
 ```

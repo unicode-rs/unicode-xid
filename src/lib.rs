@@ -34,7 +34,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! unicode-derived_property = "0.1.1"
+//! unicode-derived_property = "0.0.1"
 //! ```
 
 #![deny(missing_docs, unsafe_code)]

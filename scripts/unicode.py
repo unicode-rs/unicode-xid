@@ -13,12 +13,11 @@
 # This script uses the following Unicode tables:
 # - DerivedCoreProperties.txt
 # - ReadMe.txt
-# - UnicodeData.txt
 #
 # Since this should not require frequent updates, we just store this
 # out-of-line and check the unicode.rs file into git.
 
-import fileinput, re, os, sys, operator
+import fileinput, re, os, sys
 
 preamble = '''// Copyright 2012-2015 The Rust Project Developers. See the COPYRIGHT
 // file at the top-level directory of this distribution and at
@@ -35,23 +34,6 @@ preamble = '''// Copyright 2012-2015 The Rust Project Developers. See the COPYRI
 #![allow(missing_docs, non_upper_case_globals, non_snake_case)]
 '''
 
-# Mapping taken from Table 12 from:
-# http://www.unicode.org/reports/tr44/#General_Category_Values
-expanded_categories = {
-    'Lu': ['LC', 'L'], 'Ll': ['LC', 'L'], 'Lt': ['LC', 'L'],
-    'Lm': ['L'], 'Lo': ['L'],
-    'Mn': ['M'], 'Mc': ['M'], 'Me': ['M'],
-    'Nd': ['N'], 'Nl': ['N'], 'No': ['No'],
-    'Pc': ['P'], 'Pd': ['P'], 'Ps': ['P'], 'Pe': ['P'],
-    'Pi': ['P'], 'Pf': ['P'], 'Po': ['P'],
-    'Sm': ['S'], 'Sc': ['S'], 'Sk': ['S'], 'So': ['S'],
-    'Zs': ['Z'], 'Zl': ['Z'], 'Zp': ['Z'],
-    'Cc': ['C'], 'Cf': ['C'], 'Cs': ['C'], 'Co': ['C'], 'Cn': ['C'],
-}
-
-# these are the surrogate codepoints, which are not valid rust characters
-surrogate_codepoints = (0xd800, 0xdfff)
-
 def fetch(f):
     if not os.path.exists(os.path.basename(f)):
         os.system("curl -O http://www.unicode.org/Public/UNIDATA/%s"
@@ -60,92 +42,6 @@ def fetch(f):
     if not os.path.exists(os.path.basename(f)):
         sys.stderr.write("cannot load %s" % f)
         exit(1)
-
-def is_surrogate(n):
-    return surrogate_codepoints[0] <= n <= surrogate_codepoints[1]
-
-def load_unicode_data(f):
-    fetch(f)
-    gencats = {}
-    upperlower = {}
-    lowerupper = {}
-    combines = {}
-    canon_decomp = {}
-    compat_decomp = {}
-
-    udict = {};
-    range_start = -1;
-    for line in fileinput.input(f):
-        data = line.split(';');
-        if len(data) != 15:
-            continue
-        cp = int(data[0], 16);
-        if is_surrogate(cp):
-            continue
-        if range_start >= 0:
-            for i in xrange(range_start, cp):
-                udict[i] = data;
-            range_start = -1;
-        if data[1].endswith(", First>"):
-            range_start = cp;
-            continue;
-        udict[cp] = data;
-
-    for code in udict:
-        [code_org, name, gencat, combine, bidi,
-         decomp, deci, digit, num, mirror,
-         old, iso, upcase, lowcase, titlecase ] = udict[code];
-
-        # generate char to char direct common and simple conversions
-        # uppercase to lowercase
-        if gencat == "Lu" and lowcase != "" and code_org != lowcase:
-            upperlower[code] = int(lowcase, 16)
-
-        # lowercase to uppercase
-        if gencat == "Ll" and upcase != "" and code_org != upcase:
-            lowerupper[code] = int(upcase, 16)
-
-        # store decomposition, if given
-        if decomp != "":
-            if decomp.startswith('<'):
-                seq = []
-                for i in decomp.split()[1:]:
-                    seq.append(int(i, 16))
-                compat_decomp[code] = seq
-            else:
-                seq = []
-                for i in decomp.split():
-                    seq.append(int(i, 16))
-                canon_decomp[code] = seq
-
-        # place letter in categories as appropriate
-        for cat in [gencat, "Assigned"] + expanded_categories.get(gencat, []):
-            if cat not in gencats:
-                gencats[cat] = []
-            gencats[cat].append(code)
-
-        # record combining class, if any
-        if combine != "0":
-            if combine not in combines:
-                combines[combine] = []
-            combines[combine].append(code)
-
-    # generate Not_Assigned from Assigned
-    gencats["Cn"] = gen_unassigned(gencats["Assigned"])
-    # Assigned is not a real category
-    del(gencats["Assigned"])
-    # Other contains Not_Assigned
-    gencats["C"].extend(gencats["Cn"])
-    gencats = group_cats(gencats)
-    combines = to_combines(group_cats(combines))
-
-    return (canon_decomp, compat_decomp, gencats, combines, lowerupper, upperlower)
-
-def group_cats(cats):
-    cats_out = {}
-    for cat in cats:
-        cats_out[cat] = group_cat(cats[cat])
-    return cats_out
 
 def group_cat(cat):
     cat_out = []
@@ -170,19 +66,6 @@ def ungroup_cat(cat):
             cat_out.append(lo)
             lo += 1
     return cat_out
-
-def gen_unassigned(assigned):
-    assigned = set(assigned)
-    return ([i for i in range(0, 0xd800) if i not in assigned] +
-            [i for i in range(0xe000, 0x110000) if i not in assigned])
-
-def to_combines(combs):
-    combs_out = []
-    for comb in combs:
-        for (lo, hi) in combs[comb]:
-            combs_out.append((lo, hi, comb))
-    combs_out.sort(key=lambda comb: comb[0])
-    return combs_out
 
 def format_table_content(f, content, indent):
     line = " "*indent
@@ -304,15 +187,8 @@ if __name__ == "__main__":
 /// that this version of unicode-derived-property is based on.
 pub const UNICODE_VERSION: (u64, u64, u64) = (%s, %s, %s);
 """ % unicode_version)
-        (canon_decomp, compat_decomp, gencats, combines,
-                lowerupper, upperlower) = load_unicode_data("UnicodeData.txt")
-        want_derived = ["XID_Start", "XID_Continue"]
-        derived = load_properties("DerivedCoreProperties.txt", want_derived)
-        props = load_properties("PropList.txt",
-                ["White_Space", "Join_Control", "Noncharacter_Code_Point"])
-
-        # bsearch_range_table is used in all the property modules below
         emit_bsearch_range_table(rf)
 
-        # category tables
+        want_derived = ["XID_Start", "XID_Continue"]
+        derived = load_properties("DerivedCoreProperties.txt", want_derived)
         emit_property_module(rf, "derived_property", derived, want_derived)
