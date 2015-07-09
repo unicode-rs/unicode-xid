@@ -42,7 +42,7 @@
        html_favicon_url = "https://unicode-rs.github.io/unicode-rs_sm.png")]
 
 #![cfg_attr(feature = "no_std", no_std)]
-#![cfg_attr(feature = "no_std", feature(no_std, core))]
+#![cfg_attr(feature = "no_std", feature(no_std, core, core_slice_ext))]
 
 #![cfg_attr(test, feature(test, unicode))]
 
