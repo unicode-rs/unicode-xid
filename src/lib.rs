@@ -24,7 +24,7 @@
 //!
 //! # features
 //!
-//! unicode-width supports a `no_std` feature. This eliminates dependence
+//! unicode-xid supports a `no_std` feature. This eliminates dependence
 //! on std, and instead uses equivalent functions from core.
 //!
 //! # crates.io
@@ -34,7 +34,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! unicode-derived_property = "0.0.1"
+//! unicode-xid = "0.0.3"
 //! ```
 
 #![deny(missing_docs, unsafe_code)]

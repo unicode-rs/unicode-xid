@@ -184,7 +184,7 @@ if __name__ == "__main__":
             unicode_version = re.search(pattern, readme.read()).groups()
         rf.write("""
 /// The version of [Unicode](http://www.unicode.org/)
-/// that this version of unicode-derived-property is based on.
+/// that this version of unicode-xid is based on.
 pub const UNICODE_VERSION: (u64, u64, u64) = (%s, %s, %s);
 """ % unicode_version)
         emit_bsearch_range_table(rf)

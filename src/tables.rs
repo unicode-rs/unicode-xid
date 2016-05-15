@@ -13,7 +13,7 @@
 #![allow(missing_docs, non_upper_case_globals, non_snake_case)]
 
 /// The version of [Unicode](http://www.unicode.org/)
-/// that this version of unicode-derived-property is based on.
+/// that this version of unicode-xid is based on.
 pub const UNICODE_VERSION: (u64, u64, u64) = (8, 0, 0);
 
 fn bsearch_range_table(c: char, r: &'static [(char,char)]) -> bool {
