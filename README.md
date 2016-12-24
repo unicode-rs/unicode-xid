@@ -30,5 +30,5 @@ to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-unicode-xid = "0.0.3"
+unicode-xid = "0.0.4"
 ```
