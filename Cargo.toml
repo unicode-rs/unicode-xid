@@ -20,6 +20,9 @@ Unicode Standard Annex #31.
 
 exclude = [ "target/*", "Cargo.lock" ]
 
+[badges]
+travis-ci = { repository = "unicode-rs/unicode-xid" }
+
 [features]
 default = []
 no_std = []
