@@ -18,7 +18,7 @@ or XID_Continue properties according to
 Unicode Standard Annex #31.
 """
 
-exclude = [ "target/*", "Cargo.lock" ]
+exclude = [ "target/*", "Cargo.lock", "/scripts/*" ]
 
 [features]
 default = []
