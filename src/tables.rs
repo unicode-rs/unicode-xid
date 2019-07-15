@@ -27,7 +27,7 @@ fn bsearch_range_table(c: char, r: &'static [(char,char)]) -> bool {
 }
 
 pub mod derived_property {
-    pub const XID_Continue_table: &'static [(char, char)] = &[
+    pub const XID_Continue_table: &[(char, char)] = &[
         ('\u{30}', '\u{39}'), ('\u{41}', '\u{5a}'), ('\u{5f}', '\u{5f}'), ('\u{61}', '\u{7a}'),
         ('\u{aa}', '\u{aa}'), ('\u{b5}', '\u{b5}'), ('\u{b7}', '\u{b7}'), ('\u{ba}', '\u{ba}'),
         ('\u{c0}', '\u{d6}'), ('\u{d8}', '\u{f6}'), ('\u{f8}', '\u{2c1}'), ('\u{2c6}', '\u{2d1}'),
@@ -241,7 +241,7 @@ pub mod derived_property {
         super::bsearch_range_table(c, XID_Continue_table)
     }
 
-    pub const XID_Start_table: &'static [(char, char)] = &[
+    pub const XID_Start_table: &[(char, char)] = &[
         ('\u{41}', '\u{5a}'), ('\u{61}', '\u{7a}'), ('\u{aa}', '\u{aa}'), ('\u{b5}', '\u{b5}'),
         ('\u{ba}', '\u{ba}'), ('\u{c0}', '\u{d6}'), ('\u{d8}', '\u{f6}'), ('\u{f8}', '\u{2c1}'),
         ('\u{2c6}', '\u{2d1}'), ('\u{2e0}', '\u{2e4}'), ('\u{2ec}', '\u{2ec}'), ('\u{2ee}',
