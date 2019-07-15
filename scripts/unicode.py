@@ -124,7 +124,7 @@ def escape_char(c):
 
 def emit_bsearch_range_table(f):
     f.write("""
-fn bsearch_range_table(c: char, r: &'static [(char,char)]) -> bool {
+fn bsearch_range_table(c: char, r: &[(char,char)]) -> bool {
     use core::cmp::Ordering::{Equal, Less, Greater};
 
     r.binary_search_by(|&(lo,hi)| {
@@ -135,7 +135,7 @@ fn bsearch_range_table(c: char, r: &'static [(char,char)]) -> bool {
 }\n
 """)
 
-def emit_table(f, name, t_data, t_type = "&'static [(char, char)]", is_pub=True,
+def emit_table(f, name, t_data, t_type = "&[(char, char)]", is_pub=True,
         pfun=lambda x: "(%s,%s)" % (escape_char(x[0]), escape_char(x[1])), is_const=True):
     pub_string = "const"
     if not is_const:
