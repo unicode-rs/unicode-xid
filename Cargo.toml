@@ -17,8 +17,10 @@ Determine whether characters have the XID_Start
 or XID_Continue properties according to
 Unicode Standard Annex #31.
 """
-
 exclude = ["/scripts/*", "/.travis.yml"]
+
+[badges]
+travis-ci = { repository = "unicode-rs/unicode-xid" }
 
 [features]
 default = []
