@@ -18,6 +18,8 @@ or XID_Continue properties according to
 Unicode Standard Annex #31.
 """
 
+exclude = ["/scripts/*", "/.travis.yml"]
+
 [features]
 default = []
 no_std = []
