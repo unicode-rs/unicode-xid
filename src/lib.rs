@@ -42,7 +42,7 @@
        html_favicon_url = "https://unicode-rs.github.io/unicode-rs_sm.png")]
 
 #![no_std]
-#![cfg_attr(feature = "bench", feature(test, rustc_private))]
+#![cfg_attr(feature = "bench", feature(test, unicode_internals))]
 
 #[cfg(test)]
 #[macro_use]
