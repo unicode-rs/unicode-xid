@@ -124,14 +124,19 @@ def escape_char(c):
 
 def emit_bsearch_range_table(f):
     f.write("""
-fn bsearch_range_table(c: char, r: &[(char,char)]) -> bool {
+fn bsearch_range_table(c: char, b: &[u8], r: &[(char,char)]) -> bool {
     use core::cmp::Ordering::{Equal, Less, Greater};
 
-    r.binary_search_by(|&(lo,hi)| {
-        if lo <= c && c <= hi { Equal }
-        else if hi < c { Less }
-        else { Greater }
-    }).is_ok()
+    let b_index = ((c as u32)>>3) as usize;
+    if b_index < b.len() {
+        (b[b_index] & (1<<((c as u32) & 7))) != 0
+    } else {
+        r.binary_search_by(|&(lo,hi)| {
+            if lo <= c && c <= hi { Equal }
+            else if hi < c { Less }
+            else { Greater }
+        }).is_ok()
+    }
 }\n
 """)
 
@@ -153,12 +158,39 @@ def emit_table(f, name, t_data, t_type = "&[(char, char)]", is_pub=True,
     format_table_content(f, data, 8)
     f.write("\n    ];\n\n")
 
+def emit_bitmap(f, name, data):
+    range_max = data[-1][1]
+    bitmap_bytes = [0 for _ in range(0, (range_max+7)/8)]
+    for (start, end) in data:
+        for index in range(start, end+1):
+            bitmap_bytes[index>>3] |= 1<<(index&7)
+
+    f.write("   const %s: &[u8] = &[" % name);
+    for (byte_index, x) in enumerate(bitmap_bytes):
+        if byte_index % 12 == 0:
+            f.write("\n      ");
+        f.write(" 0x%02X," % x)
+    f.write("\n    ];\n");
+
+def split_table(data):
+    best_split_index = 0
+    best_split_size = len(data)*8
+    for (index, (start, end)) in enumerate(data):
+        size = (end+7) / 8 + (len(data) - index) * 8
+        if size < best_split_size:
+            best_split_size = size
+            best_split_index = index
+    return (data[:best_split_index], data[best_split_index:])
+
+
 def emit_property_module(f, mod, tbl, emit):
     f.write("pub mod %s {\n" % mod)
     for cat in sorted(emit):
-        emit_table(f, "%s_table" % cat, tbl[cat])
+        bitmap_range, table_range = split_table(tbl[cat])
+        emit_bitmap(f, "%s_bitmap" % cat, bitmap_range)
+        emit_table(f, "%s_table" % cat, table_range)
         f.write("    pub fn %s(c: char) -> bool {\n" % cat)
-        f.write("        super::bsearch_range_table(c, %s_table)\n" % cat)
+        f.write("        super::bsearch_range_table(c, %s_bitmap, %s_table)\n" % (cat, cat))
         f.write("    }\n\n")
     f.write("}\n\n")
 
