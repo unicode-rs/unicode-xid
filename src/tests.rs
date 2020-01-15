@@ -16,6 +16,9 @@ use test::Bencher;
 use std::prelude::v1::*;
 
 #[cfg(feature = "bench")]
+use UnicodeXID;
+
+#[cfg(feature = "bench")]
 #[bench]
 fn cargo_is_xid_start(b: &mut Bencher) {
     let string = iter::repeat('a').take(4096).collect::<String>();
