@@ -20,9 +20,14 @@ fn bsearch_range_table(c: char, r: &[(char,char)]) -> bool {
     use core::cmp::Ordering::{Equal, Less, Greater};
 
     r.binary_search_by(|&(lo,hi)| {
-        if lo <= c && c <= hi { Equal }
+        // Because ASCII ranges are at the start of the tables, a search for an
+        // ASCII char will involve more `Greater` results (i.e. the `(lo,hi)`
+        // table entry is greater than `c`) than `Less` results. And given that
+        // ASCII chars are so common, it makes sense to favor them. Therefore,
+        // the `Greater` case is tested for before the `Less` case.
+        if lo > c { Greater }
         else if hi < c { Less }
-        else { Greater }
+        else { Equal }
     }).is_ok()
 }
 
@@ -446,6 +451,5 @@ pub mod derived_property {
     pub fn XID_Start(c: char) -> bool {
         super::bsearch_range_table(c, XID_Start_table)
     }
-
 }
 
