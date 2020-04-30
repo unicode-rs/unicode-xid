@@ -27,15 +27,7 @@
 //! unicode-xid supports a `no_std` feature. This eliminates dependence
 //! on std, and instead uses equivalent functions from core.
 //!
-//! # crates.io
-//!
-//! You can use this package in your project by adding the following
-//! to your `Cargo.toml`:
-//!
-//! ```toml
-//! [dependencies]
-//! unicode-xid = "0.0.4"
-//! ```
+
 
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
