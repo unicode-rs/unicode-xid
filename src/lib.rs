@@ -28,12 +28,12 @@
 //! on std, and instead uses equivalent functions from core.
 //!
 
-
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
-#![doc(html_logo_url = "https://unicode-rs.github.io/unicode-rs_sm.png",
-       html_favicon_url = "https://unicode-rs.github.io/unicode-rs_sm.png")]
-
+#![doc(
+    html_logo_url = "https://unicode-rs.github.io/unicode-rs_sm.png",
+    html_favicon_url = "https://unicode-rs.github.io/unicode-rs_sm.png"
+)]
 #![no_std]
 #![cfg_attr(feature = "bench", feature(test, unicode_internals))]
 
@@ -73,8 +73,12 @@ pub trait UnicodeXID {
 
 impl UnicodeXID for char {
     #[inline]
-    fn is_xid_start(self) -> bool { derived_property::XID_Start(self) }
+    fn is_xid_start(self) -> bool {
+        derived_property::XID_Start(self)
+    }
 
     #[inline]
-    fn is_xid_continue(self) -> bool { derived_property::XID_Continue(self) }
+    fn is_xid_continue(self) -> bool {
+        derived_property::XID_Continue(self)
+    }
 }
