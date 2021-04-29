@@ -4,6 +4,7 @@ name = "unicode-xid"
 version = "0.2.2"
 authors = ["erick.tryzelaar <erick.tryzelaar@gmail.com>",
            "kwantam <kwantam@gmail.com>",
+           "Manish Goregaokar <manishsmail@gmail.com>"
            ]
 
 homepage = "https://github.com/unicode-rs/unicode-xid"
