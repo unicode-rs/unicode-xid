@@ -19,6 +19,7 @@ or XID_Continue properties according to
 Unicode Standard Annex #31.
 """
 exclude = ["/.github/**", "/scripts/*"]
+rust-version = "1.17"
 
 [features]
 default = []
