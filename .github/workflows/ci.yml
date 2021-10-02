@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  schedule: [cron: "40 1 * * *"]
+
+jobs:
+  test:
+    name: Rust ${{matrix.rust}}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        rust: [nightly, beta, stable, 1.46.0, 1.17.0]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{matrix.rust}}
+          profile: minimal
+          override: true
+      - run: cargo build --features bench
+        if: matrix.rust == 'nightly'
+      - run: cargo test --features bench
+        if: matrix.rust == 'nightly'
+      - run: cargo bench --features bench
+        if: matrix.rust == 'nightly'
+      - run: cargo build
+      - run: cargo test
+        if: matrix.rust != '1.17.0'
