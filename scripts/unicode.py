@@ -135,7 +135,6 @@ fn bsearch_range_table(c: char, r: &[(char,char)]) -> bool {
         // the `Greater` case is tested for before the `Less` case.
         if lo > c { Greater }
         else if hi < c { Less }
-        else if hi < c { Less }
         else { Equal }
     }).is_ok()
 }\n
