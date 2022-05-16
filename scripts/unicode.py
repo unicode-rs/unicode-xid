@@ -146,7 +146,7 @@ def emit_table(f, name, t_data, t_type = "&[(char, char)]", is_pub=True,
     if not is_const:
         pub_string = "let"
     if is_pub:
-        pub_string = "pub " + pub_string
+        pub_string = "static"
     f.write("    %s %s: %s = &[\n" % (pub_string, name, t_type))
     data = ""
     first = True
