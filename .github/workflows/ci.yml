@@ -31,3 +31,10 @@ jobs:
         if: matrix.rust != '1.17.0'
       - name: Verify regenerated files
         run: ./scripts/unicode.py && diff tables.rs src/tables.rs
+  tables:
+    name: Rust ${{matrix.rust}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify regenerated files
+        run: ./scripts/unicode.py && diff tables.rs src/tables.rs
