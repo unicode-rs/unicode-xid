@@ -32,7 +32,7 @@ jobs:
       - name: Verify regenerated files
         run: ./scripts/unicode.py && diff tables.rs src/tables.rs
   tables:
-    name: Rust ${{matrix.rust}}
+    name: Verify tables
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
