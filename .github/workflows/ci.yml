@@ -29,8 +29,6 @@ jobs:
       - run: cargo build
       - run: cargo test
         if: matrix.rust != '1.17.0'
-      - name: Verify regenerated files
-        run: ./scripts/unicode.py && diff tables.rs src/tables.rs
   tables:
     name: Verify tables
     runs-on: ubuntu-latest
