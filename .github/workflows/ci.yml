@@ -37,4 +37,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Verify regenerated files
-        run: ./scripts/unicode.py && diff tables.rs src/tables.rs
+        run: ./scripts/unicode.py && rustfmt tables.rs && diff tables.rs src/tables.rs
