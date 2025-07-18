@@ -67,6 +67,22 @@ pub trait UnicodeXID {
     /// [UAX #31](http://unicode.org/reports/tr31/#NFKC_Modifications),
     /// mostly similar to 'ID_Continue' but modified for closure under NFKx.
     fn is_xid_continue(self) -> bool;
+
+    /// Returns whether the specified `char` satisfies the
+    /// `ID_Compat_Math_Start` Unicode property.
+    ///
+    /// `ID_Compat_Math_Start` is a Unicode Property specified in
+    /// [UAX #31](http://unicode.org/reports/tr31/#NFKC_Modifications)
+    /// as part of the Mathematical Compatibility Notation Profile.
+    fn is_id_compat_math_start(self) -> bool;
+
+    /// Returns whether the specified `char` satisfies the
+    /// `ID_Compat_Math_Continue` Unicode property.
+    ///
+    /// `ID_Compat_Math_Continue` is a Unicode Property specified in
+    /// [UAX #31](http://unicode.org/reports/tr31/#NFKC_Modifications)
+    /// as part of the Mathematical Compatibility Notation Profile.
+    fn is_id_compat_math_continue(self) -> bool;
 }
 
 impl UnicodeXID for char {
@@ -86,5 +102,15 @@ impl UnicodeXID for char {
             || ('0' <= self && self <= '9')
             || self == '_'
             || (self > '\x7f' && derived_property::XID_Continue(self))
+    }
+
+    #[inline]
+    fn is_id_compat_math_start(self) -> bool {
+        derived_property::ID_Compat_Math_Start(self)
+    }
+
+    #[inline]
+    fn is_id_compat_math_continue(self) -> bool {
+        derived_property::ID_Compat_Math_Continue(self)
     }
 }

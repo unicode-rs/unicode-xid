@@ -1534,4 +1534,49 @@ pub mod derived_property {
     pub fn XID_Start(c: char) -> bool {
         super::bsearch_range_table(c, XID_Start_table)
     }
+
+    static ID_Compat_Math_Continue_table: &[(char, char)] = &[
+        ('\u{b2}', '\u{b3}'),
+        ('\u{b9}', '\u{b9}'),
+        ('\u{2070}', '\u{2070}'),
+        ('\u{2074}', '\u{207e}'),
+        ('\u{2080}', '\u{208e}'),
+        ('\u{2202}', '\u{2202}'),
+        ('\u{2207}', '\u{2207}'),
+        ('\u{221e}', '\u{221e}'),
+        ('\u{1d6c1}', '\u{1d6c1}'),
+        ('\u{1d6db}', '\u{1d6db}'),
+        ('\u{1d6fb}', '\u{1d6fb}'),
+        ('\u{1d715}', '\u{1d715}'),
+        ('\u{1d735}', '\u{1d735}'),
+        ('\u{1d74f}', '\u{1d74f}'),
+        ('\u{1d76f}', '\u{1d76f}'),
+        ('\u{1d789}', '\u{1d789}'),
+        ('\u{1d7a9}', '\u{1d7a9}'),
+        ('\u{1d7c3}', '\u{1d7c3}'),
+    ];
+
+    pub fn ID_Compat_Math_Continue(c: char) -> bool {
+        super::bsearch_range_table(c, ID_Compat_Math_Continue_table)
+    }
+
+    static ID_Compat_Math_Start_table: &[(char, char)] = &[
+        ('\u{2202}', '\u{2202}'),
+        ('\u{2207}', '\u{2207}'),
+        ('\u{221e}', '\u{221e}'),
+        ('\u{1d6c1}', '\u{1d6c1}'),
+        ('\u{1d6db}', '\u{1d6db}'),
+        ('\u{1d6fb}', '\u{1d6fb}'),
+        ('\u{1d715}', '\u{1d715}'),
+        ('\u{1d735}', '\u{1d735}'),
+        ('\u{1d74f}', '\u{1d74f}'),
+        ('\u{1d76f}', '\u{1d76f}'),
+        ('\u{1d789}', '\u{1d789}'),
+        ('\u{1d7a9}', '\u{1d7a9}'),
+        ('\u{1d7c3}', '\u{1d7c3}'),
+    ];
+
+    pub fn ID_Compat_Math_Start(c: char) -> bool {
+        super::bsearch_range_table(c, ID_Compat_Math_Start_table)
+    }
 }
