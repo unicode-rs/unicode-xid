@@ -158,14 +158,12 @@ def emit_table(f, name, t_data, t_type = "&[(char, char)]", is_pub=True,
     format_table_content(f, data, 8)
     f.write("\n    ];\n\n")
 
-def emit_property_module(f, mod, tbl, emit):
-    f.write("pub mod %s {\n" % mod)
+def emit_property_module_contents(f, tbl, emit):
     for cat in sorted(emit):
         emit_table(f, "%s_table" % cat, tbl[cat])
         f.write("    pub fn %s(c: char) -> bool {\n" % cat)
         f.write("        super::bsearch_range_table(c, %s_table)\n" % cat)
         f.write("    }\n\n")
-    f.write("}\n\n")
 
 if __name__ == "__main__":
     r = "tables.rs"
@@ -187,6 +185,16 @@ pub const UNICODE_VERSION: (u64, u64, u64) = (%s, %s, %s);
 """ % unicode_version)
         emit_bsearch_range_table(rf)
 
+        rf.write("pub mod derived_property {\n")
+
+        # XID_Start and XID_Continue
         want_derived = ["XID_Start", "XID_Continue"]
         derived = load_properties("DerivedCoreProperties.txt", want_derived)
-        emit_property_module(rf, "derived_property", derived, want_derived)
+        emit_property_module_contents(rf, derived, want_derived)
+
+        # ID_Compat_Math_Start and ID_Compat_Math_Continue
+        want_derived = ["ID_Compat_Math_Start", "ID_Compat_Math_Continue"]
+        derived = load_properties("PropList.txt", want_derived)
+        emit_property_module_contents(rf, derived, want_derived)
+
+        rf.write("}\n\n")
